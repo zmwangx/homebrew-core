@@ -18,8 +18,11 @@ class Sqlite < Formula
   option "with-fts5", "Enable the FTS5 module (experimental)"
   option "with-functions", "Enable more math and string functions for SQL queries"
   option "with-json1", "Enable the JSON1 extension"
+  option "with-icu4c", "Enable the ICU tokenizer"
 
   depends_on "readline"
+
+  depends_on "icu4c" => :optional
 
   resource "functions" do
     url "https://sqlite.org/contrib/download/extension-functions.c?get=25"
@@ -36,6 +39,10 @@ class Sqlite < Formula
     ENV.append "CPPFLAGS", "-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1" if build.with? "fts"
     ENV.append "CPPFLAGS", "-DSQLITE_ENABLE_FTS5=1" if build.with? "fts5"
     ENV.append "CPPFLAGS", "-DSQLITE_ENABLE_JSON1=1" if build.with? "json1"
+    if build.with? "icu4c"
+      ENV.append "CPPFLAGS", "-DSQLITE_ENABLE_ICU"
+      ENV.append "LDFLAGS", "-licui18n -licuuc -licudata"
+    end
 
     args = %W[
       --prefix=#{prefix}
