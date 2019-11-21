@@ -68,15 +68,6 @@ class Moc < Formula
     system "make", "install"
   end
 
-  def caveats
-    <<~EOS
-      You must start the jack daemon prior to running mocp.
-      If you need wide-character support in the player, for example
-      with Chinese characters, you can install using
-          --with-ncurses
-    EOS
-  end
-
   test do
     assert_match version.to_s, shell_output("#{bin}/mocp --version")
   end
